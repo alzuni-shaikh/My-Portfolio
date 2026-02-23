@@ -169,3 +169,28 @@ footer{
 .social-icons i:hover{
   color:#ffcc00;
 }
+
+section {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.6s ease;
+}
+
+section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#formMessage {
+    margin-top: 15px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.success {
+    color: #4CAF50;
+}
+
+.error {
+    color: #ff4d4d;
+}
