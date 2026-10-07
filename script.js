@@ -68,13 +68,14 @@ const heroText = document.querySelector("h1");
 
 if (heroText) {
     const text = "Hi, I'm Alzuni 👋";
+    const chars = Array.from(text);
     let index = 0;
 
     heroText.innerText = "";
 
     function typeEffect() {
-        if (index < text.length) {
-            heroText.innerText += text.charAt(index);
+        if (index < chars.length) {
+            heroText.innerText += chars[index];
             index++;
             setTimeout(typeEffect, 70);
         }
@@ -95,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const messageInput = document.getElementById("message");
     const messageBox = document.getElementById("formMessage");
     const button = form ? form.querySelector("button") : null;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!form || !messageBox) return;
 
@@ -107,6 +109,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (!name || !email || !message) {
             messageBox.innerText = "Please fill all fields!";
+            messageBox.className = "error";
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            messageBox.innerText = "Please enter a valid email address!";
             messageBox.className = "error";
             return;
         }
@@ -125,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 body: JSON.stringify({ name, email, message })
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({}));
 
             if (response.ok) {
                 messageBox.innerText = data.message || "Message sent successfully 🚀";
