@@ -9,9 +9,11 @@ document.querySelectorAll("nav a").forEach(link => {
         const targetId = this.getAttribute("href");
         const targetSection = document.querySelector(targetId);
 
-        targetSection.scrollIntoView({
-            behavior: "smooth"
-        });
+        if (targetSection) {
+            targetSection.scrollIntoView({
+                behavior: "smooth"
+            });
+        }
     });
 });
 
@@ -20,13 +22,17 @@ document.querySelectorAll("nav a").forEach(link => {
 // View My Work Button Scroll
 // ===============================
 
-const viewBtn = document.querySelector(".btn"); // change class if different
+const viewBtn = document.querySelector(".btn");
 
 if (viewBtn) {
-    viewBtn.addEventListener("click", () => {
-        document.querySelector("#projects").scrollIntoView({
-            behavior: "smooth"
-        });
+    viewBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const portfolioSection = document.querySelector("#portfolio");
+        if (portfolioSection) {
+            portfolioSection.scrollIntoView({
+                behavior: "smooth"
+            });
+        }
     });
 }
 
@@ -51,75 +57,7 @@ const revealSection = () => {
 };
 
 window.addEventListener("scroll", revealSection);
-
-
-// ===============================
-// Contact Form Validation
-// ===============================
-document.addEventListener("DOMContentLoaded", function() {
-
-    const form = document.querySelector("form");
-    const messageBox = document.getElementById("formMessage");
-    const button = form.querySelector("button");
-
-    form.addEventListener("submit", async function(e) {
-        e.preventDefault();
-
-        const name = form.querySelector("input[type='text']").value.trim();
-        const email = form.querySelector("input[type='email']").value.trim();
-        const message = form.querySelector("textarea").value.trim();
-
-        if (!name || !email || !message) {
-            messageBox.innerText = "Please fill all fields!";
-            messageBox.className = "error";
-            return;
-        }
-
-        button.innerText = "Sending...";
-        button.disabled = true;
-
-        try {
-            const response = await fetch("http://localhost:5000/contact", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ name, email, message })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                messageBox.innerText = "Message sent successfully 🚀";
-                messageBox.className = "success";
-                form.reset();
-            } else {
-                messageBox.innerText = "Something went wrong!";
-                messageBox.className = "error";
-            }
-
-        } catch (error) {
-            messageBox.innerText = "Server not responding!";
-            messageBox.className = "error";
-        }
-
-        button.innerText = "Send Message";
-        button.disabled = false;
-
-       if (response.ok) {
-    messageBox.innerText = "Message sent successfully 🚀";
-    messageBox.className = "success";
-    form.reset();
-
-    setTimeout(() => {
-        messageBox.innerText = "";
-        messageBox.className = "";
-    }, 3000);
-}
-
-    });
-
-});
+window.addEventListener("DOMContentLoaded", revealSection);
 
 
 // ===============================
@@ -145,16 +83,38 @@ if (heroText) {
     typeEffect();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
 
+// ===============================
+// Contact Form Submission
+// ===============================
+
+document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const messageInput = document.getElementById("message");
+    const messageBox = document.getElementById("formMessage");
+    const button = form ? form.querySelector("button") : null;
+
+    if (!form || !messageBox) return;
 
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
 
-        const name = form.querySelector("input[type='text']").value;
-        const email = form.querySelector("input[type='email']").value;
-        const message = form.querySelector("textarea").value;
+        const name = nameInput ? nameInput.value.trim() : "";
+        const email = emailInput ? emailInput.value.trim() : "";
+        const message = messageInput ? messageInput.value.trim() : "";
+
+        if (!name || !email || !message) {
+            messageBox.innerText = "Please fill all fields!";
+            messageBox.className = "error";
+            return;
+        }
+
+        if (button) {
+            button.innerText = "Sending...";
+            button.disabled = true;
+        }
 
         try {
             const response = await fetch("http://localhost:5000/contact", {
@@ -167,12 +127,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const data = await response.json();
 
-            alert(data.success);
-            form.reset();
+            if (response.ok) {
+                messageBox.innerText = data.message || "Message sent successfully 🚀";
+                messageBox.className = "success";
+                form.reset();
 
+                setTimeout(() => {
+                    messageBox.innerText = "";
+                    messageBox.className = "";
+                }, 3000);
+            } else {
+                messageBox.innerText = data.error || data.message || "Something went wrong!";
+                messageBox.className = "error";
+            }
         } catch (error) {
-            alert("Server not responding!");
+            console.error("Contact form error:", error);
+            messageBox.innerText = "Server not responding!";
+            messageBox.className = "error";
+        } finally {
+            if (button) {
+                button.innerText = "Send Message";
+                button.disabled = false;
+            }
         }
     });
-
 });
