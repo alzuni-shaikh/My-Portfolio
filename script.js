@@ -104,27 +104,53 @@ document.addEventListener("DOMContentLoaded", function() {
     const messageBox = document.getElementById("formMessage");
     const button = form ? form.querySelector("button") : null;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let isSubmitting = false;
+    let messageTimer = null;
 
     if (!form || !messageBox) return;
 
+    if (!messageBox.getAttribute("aria-live")) {
+        messageBox.setAttribute("aria-live", "polite");
+    }
+
+    const showMessage = (text, type, autoClear = false) => {
+        if (messageTimer) {
+            clearTimeout(messageTimer);
+            messageTimer = null;
+        }
+        messageBox.innerText = text;
+        messageBox.className = type;
+
+        if (autoClear) {
+            messageTimer = setTimeout(() => {
+                messageBox.innerText = "";
+                messageBox.className = "";
+                messageTimer = null;
+            }, 4000);
+        }
+    };
+
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
+
+        if (isSubmitting) return;
 
         const name = nameInput ? nameInput.value.trim() : "";
         const email = emailInput ? emailInput.value.trim() : "";
         const message = messageInput ? messageInput.value.trim() : "";
 
         if (!name || !email || !message) {
-            messageBox.innerText = "Please fill all fields!";
-            messageBox.className = "error";
+            showMessage("Please fill all fields!", "error");
             return;
         }
 
         if (!emailRegex.test(email)) {
-            messageBox.innerText = "Please enter a valid email address!";
-            messageBox.className = "error";
+            showMessage("Please enter a valid email address!", "error");
             return;
         }
+
+        isSubmitting = true;
+        const originalButtonText = button ? button.innerText : "Send Message";
 
         if (button) {
             button.innerText = "Sending...";
@@ -142,26 +168,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const data = await response.json().catch(() => ({}));
 
-            if (response.ok) {
-                messageBox.innerText = data.message || "Message sent successfully 🚀";
-                messageBox.className = "success";
+            if (response.ok && data && data.success === true) {
+                showMessage(data.message || "Message sent successfully 🚀", "success", true);
                 form.reset();
-
-                setTimeout(() => {
-                    messageBox.innerText = "";
-                    messageBox.className = "";
-                }, 3000);
             } else {
-                messageBox.innerText = data.error || data.message || "Something went wrong!";
-                messageBox.className = "error";
+                let errorMessage = "Something went wrong! Please try again.";
+                if (data && typeof data.error === "string" && !data.error.includes("\n") && !data.error.includes("at ")) {
+                    errorMessage = data.error;
+                } else if (data && typeof data.message === "string") {
+                    errorMessage = data.message;
+                }
+                showMessage(errorMessage, "error");
             }
         } catch (error) {
             console.error("Contact form error:", error);
-            messageBox.innerText = "Server not responding!";
-            messageBox.className = "error";
+            showMessage("Server not responding! Please try again later.", "error");
         } finally {
+            isSubmitting = false;
             if (button) {
-                button.innerText = "Send Message";
+                button.innerText = originalButtonText;
                 button.disabled = false;
             }
         }
