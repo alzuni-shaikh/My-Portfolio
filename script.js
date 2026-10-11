@@ -4,12 +4,14 @@
 
 document.querySelectorAll("nav a").forEach(link => {
     link.addEventListener("click", function(e) {
-        e.preventDefault();
-
         const targetId = this.getAttribute("href");
-        const targetSection = document.querySelector(targetId);
+        if (!targetId || !targetId.startsWith("#") || targetId === "#") {
+            return;
+        }
 
+        const targetSection = document.getElementById(targetId.slice(1));
         if (targetSection) {
+            e.preventDefault();
             targetSection.scrollIntoView({
                 behavior: "smooth"
             });
@@ -25,11 +27,16 @@ document.querySelectorAll("nav a").forEach(link => {
 const viewBtn = document.querySelector(".btn");
 
 if (viewBtn) {
-    viewBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        const portfolioSection = document.querySelector("#portfolio");
-        if (portfolioSection) {
-            portfolioSection.scrollIntoView({
+    viewBtn.addEventListener("click", function(e) {
+        const targetId = this.getAttribute("href") || "#portfolio";
+        if (!targetId.startsWith("#") || targetId === "#") {
+            return;
+        }
+
+        const targetSection = document.getElementById(targetId.slice(1));
+        if (targetSection) {
+            e.preventDefault();
+            targetSection.scrollIntoView({
                 behavior: "smooth"
             });
         }

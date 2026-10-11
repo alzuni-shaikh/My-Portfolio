@@ -25,6 +25,11 @@ nav{
   align-items:center;
 }
 
+.logo a{
+  color:inherit;
+  text-decoration:none;
+}
+
 nav ul{
   display:flex;
   list-style:none;
