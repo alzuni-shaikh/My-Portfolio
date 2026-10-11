@@ -18,7 +18,7 @@
 <body>
 
 <header>
-  <nav>
+  <nav aria-label="Main Navigation">
     <h2 class="logo"><a href="#home">Alzuni</a></h2>
     <ul>
       <li><a href="#home">Home</a></li>
@@ -29,78 +29,80 @@
   </nav>
 </header>
 
-<!-- HERO SECTION -->
-<section id="home">
-  <h1>Hi, I'm Alzuni 👋</h1>
-  <p>Full Stack Developer passionate about building beautiful web experiences.</p>
-  <a href="#portfolio" class="btn">View My Work</a>
-</section>
+<main id="main">
+  <!-- HERO SECTION -->
+  <section id="home">
+    <h1>Hi, I'm Alzuni 👋</h1>
+    <p>Full Stack Developer passionate about building beautiful web experiences.</p>
+    <a href="#portfolio" class="btn">View My Work</a>
+  </section>
 
-<!-- ABOUT -->
-<section id="about">
-  <h2>About Me</h2>
-  <p>I am a full-stack developer skilled in HTML, CSS, JavaScript and backend technologies. I love creating modern and responsive websites.</p>
-</section>
+  <!-- ABOUT -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I am a full-stack developer skilled in HTML, CSS, JavaScript and backend technologies. I love creating modern and responsive websites.</p>
+  </section>
 
-<!-- PROJECTS -->
-<section id="portfolio">
-  <h2>My Projects</h2>
-  <div class="project-gallery">
+  <!-- PROJECTS -->
+  <section id="portfolio">
+    <h2>My Projects</h2>
+    <div class="project-gallery">
 
-    <div class="project">
-      <i class="fas fa-code"></i>
-      <h3>Portfolio Website</h3>
-      <p>Personal portfolio website built using HTML and CSS.</p>
+      <div class="project">
+        <i class="fas fa-code" aria-hidden="true"></i>
+        <h3>Portfolio Website</h3>
+        <p>Personal portfolio website built using HTML and CSS.</p>
+      </div>
+
+      <div class="project">
+        <i class="fas fa-database" aria-hidden="true"></i>
+        <h3>Database App</h3>
+        <p>CRUD application using Node.js and SQL.</p>
+      </div>
+
+      <div class="project">
+        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+        <h3>Responsive Design</h3>
+        <p>Mobile-first responsive layouts for modern UI.</p>
+      </div>
+
     </div>
+  </section>
 
-    <div class="project">
-      <i class="fas fa-database"></i>
-      <h3>Database App</h3>
-      <p>CRUD application using Node.js and SQL.</p>
-    </div>
+  <!-- CONTACT FORM -->
+  <section id="contact">
+    <h2>Contact Me</h2>
 
-    <div class="project">
-      <i class="fas fa-mobile-alt"></i>
-      <h3>Responsive Design</h3>
-      <p>Mobile-first responsive layouts for modern UI.</p>
-    </div>
+    <form>
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" autocomplete="name" required>
 
-  </div>
-</section>
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" required>
 
-<!-- CONTACT FORM -->
-<section id="contact">
-  <h2>Contact Me</h2>
+      <label for="message">Your Message</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
 
-  <form>
-    <label for="name">Your Name</label>
-    <input type="text" id="name" required>
+      <button type="submit">Send Message</button>
 
-    <label for="email">Your Email</label>
-    <input type="email" id="email" required>
-
-    <label for="message">Your Message</label>
-    <textarea id="message" rows="4" required></textarea>
-
-    <button type="submit">Send Message</button>
-
-    <p id="formMessage" aria-live="polite"></p>
-  </form>
-</section>
+      <p id="formMessage" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
 
 <footer>
   <p>© 2026 Alzuni Shaikh. All Rights Reserved.</p>
   <div class="social-icons">
-    <a href="https://www.linkedin.com/in/alzuni-shaikh-650171307/" target="_blank" rel="noopener noreferrer">
-        <i class="fab fa-linkedin"></i>
+    <a href="https://www.linkedin.com/in/alzuni-shaikh-650171307/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <i class="fab fa-linkedin" aria-hidden="true"></i>
     </a>
 
-    <a href="https://github.com/alzuni-shaikh" target="_blank" rel="noopener noreferrer">
-        <i class="fab fa-github"></i>
+    <a href="https://github.com/alzuni-shaikh" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <i class="fab fa-github" aria-hidden="true"></i>
     </a>
 
-    <a href="https://x.com/AlzuniS" target="_blank" rel="noopener noreferrer">
-        <i class="fab fa-twitter"></i>
+    <a href="https://x.com/AlzuniS" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+        <i class="fab fa-twitter" aria-hidden="true"></i>
     </a>
 </div>
 </footer>
